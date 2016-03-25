@@ -2,13 +2,15 @@ from flask import Flask, render_template, url_for, request, redirect, session
 from models import db, User, Place
 from forms import SignupForm, LoginForm, AddressForm
 import geocoder
+from flask.ext.bcrypt import Bcrypt
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI']='postgresql+psycopg2://postgres:1988g@localhost:5432/postgres'
 db.init_app(app)
 
 app.secret_key = "super-secret-key"
-
+bcrypt = Bcrypt(app)
 @app.route("/")
 def index():
 	return render_template('index.html')
@@ -77,7 +79,6 @@ def home():
 			p = Place()
 			my_coords = p.address_to_latlng(address)
 			places = p.query(address)
-			print places
 			return render_template('home.html', form=form, my_coords=my_coords, places=places)
 	elif request.method == 'GET':
 		return render_template('home.html', form=form, my_coords=my_coords,places=places)
