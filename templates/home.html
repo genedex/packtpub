@@ -60,6 +60,11 @@ var planes = [
         .bindPopup(planes[i][0])
         .addTo(map);
     }
+    var circle = L.circle([{{ my_coords[0] }}, {{ my_coords[1] }}], 50, {
+	    color: 'red',
+	    fillColor: '#f03',
+	    fillOpacity: 0.5
+	}).addTo(map);
 
 </script>
 {% endblock %}

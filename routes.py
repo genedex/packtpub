@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect, session
 from models import db, User, Place
 from forms import SignupForm, LoginForm, AddressForm
-
+import geocoder
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI']='postgresql+psycopg2://postgres:1988g@localhost:5432/postgres'
@@ -68,7 +68,7 @@ def home():
 		return redirect(url_for('login'))
 	form = AddressForm()
 	places = []
-	my_coords = (37.4221, -122.0844)
+	my_coords = geocoder.google('Mountain View, CA').latlng
 	if request.method == 'POST':
 		if not form.validate():
 			return render_template('home.html', form=form, my_coords=my_coords)
