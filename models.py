@@ -10,6 +10,8 @@ db = SQLAlchemy()
 
 from flask.ext.bcrypt import Bcrypt
 bcrypt = Bcrypt()
+from argon2 import PasswordHasher
+ph = PasswordHasher()
 
 class User(db.Model):
 	__tablename__ = 'users'
@@ -26,10 +28,11 @@ class User(db.Model):
 		self.set_password(password)
 
 	def set_password(self,password):
-		self.pwdhash = bcrypt.generate_password_hash(password)
+		#self.pwdhash = bcrypt.generate_password_hash(password)
+		self.pwdhash = ph.hash(password)#
 
 	def check_password(self, password):
-		return bcrypt.check_password_hash(self.pwdhash, password)
+		return ph.verify(self.pwdhash, password)#bcrypt.check_password_hash(self.pwdhash, password)
 
 class Place(object):
 	def meters_to_walking_time(self, meters):
